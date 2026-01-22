@@ -1,0 +1,185 @@
+/* -------------------- PAGE LAYOUT -------------------- */
+.stopwatch-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding-top: 80px;     /* space from top */
+  padding-bottom: 80px;  /* space at bottom */
+}
+
+/* -------------------- MAIN STOPWATCH CARD -------------------- */
+.stopwatch {
+  width: 400px;
+  height: 360px;
+  border-radius: 24px;
+  position: relative;
+
+  background: #020617;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  margin-bottom: 40px;
+
+  transition: box-shadow 0.3s ease;
+}
+
+
+/* -------------------- GLOW COLORS -------------------- */
+.stopwatch.white {
+  box-shadow:
+    0 0 18px rgba(255, 255, 255, 0.7),
+    0 0 40px rgba(255, 255, 255, 0.5);
+}
+
+.stopwatch.blue {
+  box-shadow:
+    0 0 25px rgba(59, 130, 246, 0.9),
+    0 0 60px rgba(59, 130, 246, 0.7);
+}
+
+.stopwatch.green {
+  box-shadow:
+    0 0 25px rgba(34, 197, 94, 0.9),
+    0 0 60px rgba(34, 197, 94, 0.7);
+}
+
+.stopwatch.purple {
+  box-shadow:
+    0 0 25px rgba(168, 85, 247, 0.9),
+    0 0 60px rgba(168, 85, 247, 0.7);
+}
+
+.stopwatch.red {
+  box-shadow:
+    0 0 25px rgba(239, 68, 68, 0.9),
+    0 0 60px rgba(239, 68, 68, 0.7);
+}
+
+/* -------------------- TIME DISPLAY -------------------- */
+.display {
+  font-size: 3.8rem;       /* BIG */
+  font-weight: 600;
+  font-family: monospace;
+  letter-spacing: 0.18em;
+
+  margin-bottom: 36px;
+}
+
+
+.stopwatch.white .display { color: #ffffff; }
+.stopwatch.blue .display { color: #3b82f6; }
+.stopwatch.green .display { color: #22c55e; }
+.stopwatch.purple .display { color: #a855f7; }
+.stopwatch.red .display { color: #ef4444; }
+
+/* -------------------- COLOR PICKER -------------------- */
+.color-picker {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  gap: 10px;
+}
+
+
+.color-picker .dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dot.white {
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+}
+
+.dot.blue {
+  background: #3b82f6;
+  box-shadow: 0 0 10px #3b82f6;
+}
+
+.dot.green {
+  background: #22c55e;
+  box-shadow: 0 0 10px #22c55e;
+}
+
+.dot.purple {
+  background: #a855f7;
+  box-shadow: 0 0 10px #a855f7;
+}
+
+.dot.red {
+  background: #ef4444;
+  box-shadow: 0 0 10px #ef4444;
+}
+
+/* Active indicator */
+.stopwatch.white .dot.white,
+.stopwatch.blue .dot.blue,
+.stopwatch.green .dot.green,
+.stopwatch.purple .dot.purple,
+.stopwatch.red .dot.red {
+  outline: 2px solid white;
+}
+
+/* -------------------- CONTROLS -------------------- */
+.controls {
+  display: flex;
+  gap: 24px;
+}
+
+
+.controls button {
+  width: 120px;
+  height:120px;
+  border-radius: 50%;
+
+  border: none;
+  cursor: pointer;
+
+  font-size: 1rem;
+  font-weight: bold;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.controls button:active {
+  transform: scale(0.95);
+}
+
+
+.start-btn { background: #22c55e; color: #022c22; }
+.pause-btn { background: #facc15; color: #422006; }
+.lap-btn   { background: #38bdf8; color: #082f49; }
+.reset-btn { background: #ef4444; color: #450a0a; }
+
+/* -------------------- LAPS SECTION -------------------- */
+.laps-wrapper {
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+.lap-card {
+  background: rgba(2, 6, 23, 0.95);
+  color: #cbd5f5;
+  border-radius: 12px;
+  padding: 10px 14px;
+
+  box-shadow: 0 0 12px rgba(148, 163, 184, 0.25);
+  text-align: center;
+  font-size: 0.95rem;
+}
