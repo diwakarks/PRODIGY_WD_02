@@ -2,29 +2,27 @@ import React, { useState, useEffect, useRef } from "react";
 import "./StopWatch.css";
 
 function StopWatch() {
-  /* ----------- STATE ----------- */
-  const [status, setStatus] = useState("idle");
-  // "idle" | "running" | "paused"
-
+  const [status, setStatus] = useState("idle"); // idle | running | paused
   const [elapsedTime, setElapsedTime] = useState(0);
   const [laps, setLaps] = useState([]);
-  const [cardColor, setCardColor] = useState("white");
 
-  const intervalIdRef = useRef(null);
+  const intervalRef = useRef(null);
   const startTimeRef = useRef(0);
+  const lastLapRef = useRef(0);
 
-  /* ----------- TIMER EFFECT ----------- */
   useEffect(() => {
     if (status === "running") {
-      intervalIdRef.current = setInterval(() => {
+      intervalRef.current = setInterval(() => {
         setElapsedTime(Date.now() - startTimeRef.current);
       }, 10);
     }
 
-    return () => clearInterval(intervalIdRef.current);
+    return () => {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    };
   }, [status]);
 
-  /* ----------- ACTIONS ----------- */
   function start() {
     startTimeRef.current = Date.now() - elapsedTime;
     setStatus("running");
@@ -37,84 +35,68 @@ function StopWatch() {
   function reset() {
     setElapsedTime(0);
     setLaps([]);
+    lastLapRef.current = 0;
     setStatus("idle");
   }
 
   function lap() {
-    setLaps(prev => [...prev, Number(elapsedTime)]);
+    const split = elapsedTime - lastLapRef.current;
+    setLaps(prev => [
+      { split, total: elapsedTime },
+      ...prev
+    ]);
+    lastLapRef.current = elapsedTime;
   }
 
-  /* ----------- FORMATTER ----------- */
-  function formatTime(time) {
-    const minutes = String(Math.floor((time / 60000) % 60)).padStart(2, "0");
-    const seconds = String(Math.floor((time / 1000) % 60)).padStart(2, "0");
-    const milliseconds = String(Math.floor((time % 1000) / 10)).padStart(2, "0");
-    return `${minutes}:${seconds}:${milliseconds}`;
+  function formatTime(ms) {
+    const m = String(Math.floor((ms / 60000) % 60)).padStart(2, "0");
+    const s = String(Math.floor((ms / 1000) % 60)).padStart(2, "0");
+    const cs = String(Math.floor((ms % 1000) / 10)).padStart(2, "0");
+    return `${m}:${s}.${cs}`;
   }
 
-  /* ----------- JSX ----------- */
   return (
     <div className="stopwatch-page">
 
-      {/* STOPWATCH CARD */}
-      <div className={`stopwatch ${cardColor}`}>
-        {/* COLOR PICKER */}
-        <div className="color-picker">
-          <span className="dot white" onClick={() => setCardColor("white")}></span>
-          <span className="dot blue" onClick={() => setCardColor("blue")}></span>
-          <span className="dot green" onClick={() => setCardColor("green")}></span>
-          <span className="dot purple" onClick={() => setCardColor("purple")}></span>
-          <span className="dot red" onClick={() => setCardColor("red")}></span>
-        </div>
-
-        {/* DISPLAY */}
-        <div className="display">
-          {formatTime(elapsedTime)}
-        </div>
-
-        {/* CONTROLS — INDUSTRY LOGIC */}
-        <div className="controls">
-
-          {/* IDLE */}
-          {status === "idle" && (
-            <button className="start-btn" onClick={start}>
-              Start
-            </button>
-          )}
-
-          {/* RUNNING */}
-          {status === "running" && (
-            <>
-              <button className="pause-btn" onClick={pause}>
-                Pause
-              </button>
-              <button className="lap-btn" onClick={lap}>
-                Lap
-              </button>
-            </>
-          )}
-
-          {/* PAUSED */}
-          {status === "paused" && (
-            <>
-              <button className="start-btn" onClick={start}>
-                Start
-              </button>
-              <button className="reset-btn" onClick={reset}>
-                Reset
-              </button>
-            </>
-          )}
-
-        </div>
+      <div className="time-display">
+        {formatTime(elapsedTime)}
       </div>
 
-      {/* LAPS SECTION (BELOW CARD) */}
+      <div className="controls">
+
+        {status === "idle" && (
+          <button className="btn start" onClick={start}>Start</button>
+        )}
+
+        {status === "running" && (
+          <>
+            <button className="btn lap" onClick={lap}>Lap</button>
+            <button className="btn pause" onClick={pause}>Pause</button>
+          </>
+        )}
+
+        {status === "paused" && (
+          <>
+            <button className="btn reset" onClick={reset}>Reset</button>
+            <button className="btn start" onClick={start}>Start</button>
+          </>
+        )}
+
+      </div>
+
       {laps.length > 0 && (
-        <div className="laps-wrapper">
-          {laps.map((lap, index) => (
-            <div key={index} className="lap-card">
-              Lap {index + 1}: {formatTime(lap)}
+        <div className="laps">
+          <div className="lap header">
+            <span>Lap</span>
+            <span>Split</span>
+            <span>Total</span>
+          </div>
+
+          {laps.map((lap, i) => (
+            <div className="lap" key={i}>
+              <span>{laps.length - i}</span>
+              <span>{formatTime(lap.split)}</span>
+              <span>{formatTime(lap.total)}</span>
             </div>
           ))}
         </div>
