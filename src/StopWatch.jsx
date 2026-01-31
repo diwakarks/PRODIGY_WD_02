@@ -52,12 +52,12 @@ function StopWatch() {
     const m = String(Math.floor((ms / 60000) % 60)).padStart(2, "0");
     const s = String(Math.floor((ms / 1000) % 60)).padStart(2, "0");
     const cs = String(Math.floor((ms % 1000) / 10)).padStart(2, "0");
-    return `${m}:${s}.${cs}`;
+    return `${m}:${s}:${cs}`;
   }
 
   return (
     <div className="stopwatch-page">
-
+      <h1> StopWatch</h1>
       <div className="time-display">
         {formatTime(elapsedTime)}
       </div>
