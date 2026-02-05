@@ -1,4 +1,6 @@
-.app {
+.app-root {
   min-height: 100vh;
-  background: #000000; 
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
 }

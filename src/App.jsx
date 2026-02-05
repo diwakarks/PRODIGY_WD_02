@@ -1,12 +1,10 @@
-import StopWatch from "./StopWatch";
+import Stopwatch from "./Stopwatch";
 import "./App.css";
 
-function App() {
+export default function App() {
   return (
-    <div className="app">
-      <StopWatch />
+    <div className="app-root">
+      <Stopwatch />
     </div>
   );
 }
-
-export default App;
